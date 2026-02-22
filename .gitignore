@@ -3,3 +3,9 @@ dist/
 .playwright/
 test-results/
 playwright-report/
+
+# TypeScriptのコンパイル済みJS（src・e2e配下）
+src/**/*.js
+e2e/**/*.js
+playwright.config.js
+vite.config.js
