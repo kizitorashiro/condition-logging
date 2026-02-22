@@ -1,0 +1,404 @@
+/* ============================================================
+   デザイントークン（CSS Variables）
+   ============================================================ */
+:root {
+  /* カラー */
+  --color-bg: #f9f8f6;
+  --color-surface: #ffffff;
+  --color-text: #1a1a1a;
+  --color-text-sub: #6b7280;
+  --color-accent: #c47a56;
+  --color-accent-light: #f9ede6;
+  --color-border: #e5e7eb;
+  --color-error: #ef4444;
+  --color-success: #10b981;
+
+  /* グラフ */
+  --color-chart-mental: #c47a56;
+  --color-chart-skin: #f59e0b;
+  --color-chart-brain: #3b82f6;
+
+  /* タイポグラフィ */
+  --font-family: 'Inter', sans-serif;
+  --font-size-base: 16px;
+  --font-size-sm: 14px;
+  --font-size-lg: 20px;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 600;
+
+  /* 余白 */
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+
+  /* 形状 */
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* ============================================================
+   ベーススタイル
+   ============================================================ */
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  padding-bottom: 80px; /* ボトムナビ分の余白 */
+}
+
+main {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: var(--spacing-md);
+}
+
+h1 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-md);
+}
+
+/* ============================================================
+   Pico CSS ボタンカラーオーバーライド
+   ============================================================ */
+
+/* プライマリボタン（保存など） */
+button[type='submit'],
+button:not(.rating-btn):not(.segment-btn):not(.nav-btn):not(.secondary):not(.contrast) {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #ffffff;
+}
+
+button[type='submit']:hover,
+button:not(.rating-btn):not(.segment-btn):not(.nav-btn):not(.secondary):not(.contrast):hover {
+  background-color: #b06847;
+  border-color: #b06847;
+}
+
+/* セカンダリボタン（キャンセル・編集） */
+button.secondary {
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+button.secondary:hover {
+  background-color: var(--color-bg);
+  border-color: var(--color-text-sub);
+}
+
+/* コントラストボタン（削除） */
+button.contrast {
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-sub);
+}
+
+button.contrast:hover {
+  border-color: var(--color-error);
+  color: var(--color-error);
+  background-color: transparent;
+}
+
+/* ============================================================
+   エラーバナー
+   ============================================================ */
+.error-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--color-error);
+  color: #ffffff;
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: center;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  z-index: 1000;
+}
+
+/* ============================================================
+   記録済みバッジ・上書き注記
+   ============================================================ */
+.recorded-badge {
+  display: inline-block;
+  background-color: var(--color-success);
+  color: #ffffff;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  padding: 4px 10px;
+  border-radius: var(--radius);
+  margin-bottom: var(--spacing-sm);
+}
+
+.overwrite-note {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-sub);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* ============================================================
+   フィールドエラー
+   ============================================================ */
+.field-error {
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+  margin-top: 4px;
+}
+
+.required {
+  color: var(--color-error);
+}
+
+/* ============================================================
+   5段階評価ボタン
+   ============================================================ */
+.rating-group {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.rating-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background-color 0.1s, border-color 0.1s;
+  padding: 0;
+}
+
+.rating-btn:hover {
+  border-color: var(--color-accent);
+}
+
+.rating-btn--selected {
+  background-color: var(--color-accent-light);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  font-weight: var(--font-weight-bold);
+}
+
+.rating-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-sub);
+  min-height: 1.4em;
+  margin: 0;
+}
+
+/* ============================================================
+   セグメントボタン（勤務状態・期間フィルター）
+   ============================================================ */
+.segment-group {
+  display: flex;
+  gap: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  width: fit-content;
+}
+
+.segment-btn {
+  padding: 8px 16px;
+  border: none;
+  border-right: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background-color 0.1s;
+}
+
+.segment-btn:last-child {
+  border-right: none;
+}
+
+.segment-btn:hover {
+  background-color: var(--color-accent-light);
+}
+
+.segment-btn--selected {
+  background-color: var(--color-accent-light);
+  color: var(--color-accent);
+  font-weight: var(--font-weight-bold);
+}
+
+/* ============================================================
+   グラフ画面
+   ============================================================ */
+.chart-filter {
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+#custom-range {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+#custom-range input[type='date'] {
+  padding: 6px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-size: var(--font-size-sm);
+  background-color: var(--color-surface);
+}
+
+#chart-no-data {
+  text-align: center;
+  color: var(--color-text-sub);
+  padding: var(--spacing-lg);
+}
+
+#chart-container {
+  position: relative;
+}
+
+/* ============================================================
+   履歴カード
+   ============================================================ */
+.history-card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.history-card__date {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-sub);
+  margin-bottom: var(--spacing-sm);
+}
+
+.history-card__metrics {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.history-card__metric {
+  font-size: var(--font-size-sm);
+}
+
+.history-card__metric-label {
+  color: var(--color-text-sub);
+}
+
+.history-card__metric-value {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-accent);
+}
+
+.history-card__workstyle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-sub);
+  margin-bottom: var(--spacing-sm);
+}
+
+.history-card__memo {
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.history-card__actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: flex-end;
+}
+
+.history-card__actions button {
+  font-size: var(--font-size-sm);
+  padding: 4px 12px;
+}
+
+/* ============================================================
+   モーダル
+   ============================================================ */
+dialog {
+  border-radius: var(--radius);
+  border: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  max-width: 500px;
+  width: 90%;
+  padding: 0;
+}
+
+dialog article {
+  padding: var(--spacing-lg);
+  margin: 0;
+}
+
+dialog h2 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-md);
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: flex-end;
+  margin-top: var(--spacing-md);
+}
+
+.modal-actions button {
+  padding: 8px 20px;
+}
+
+/* ============================================================
+   ボトムナビゲーション
+   ============================================================ */
+#bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  z-index: 100;
+}
+
+.nav-btn {
+  flex: 1;
+  padding: 12px 0;
+  border: none;
+  background: none;
+  color: var(--color-text-sub);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: color 0.1s;
+}
+
+.nav-btn:hover {
+  color: var(--color-accent);
+}
+
+.nav-btn--active {
+  color: var(--color-accent);
+  font-weight: var(--font-weight-bold);
+  border-top: 2px solid var(--color-accent);
+}

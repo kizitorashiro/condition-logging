@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>コンディションログ</title>
+    <link rel="icon" href="/favicon.ico" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.classless.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="error-banner" class="error-banner" hidden>
+      <span id="error-banner-message"></span>
+    </div>
+
+    <main>
+      <!-- 記録画面 -->
+      <section id="screen-log">
+        <h1>コンディション記録</h1>
+
+        <div id="log-recorded-badge" class="recorded-badge" hidden>
+          ✓ 本日の記録は完了しています
+        </div>
+        <p id="log-overwrite-note" class="overwrite-note" hidden>
+          ※ 保存すると上書きされます
+        </p>
+
+        <form id="log-form" novalidate>
+          <label for="log-date">記録日</label>
+          <input type="date" id="log-date" name="logDate" />
+
+          <!-- メンタル -->
+          <fieldset>
+            <legend>メンタル <span class="required">*</span></legend>
+            <div class="rating-group" id="mental-group">
+              <button type="button" class="rating-btn" data-field="mental" data-value="1">1</button>
+              <button type="button" class="rating-btn" data-field="mental" data-value="2">2</button>
+              <button type="button" class="rating-btn" data-field="mental" data-value="3">3</button>
+              <button type="button" class="rating-btn" data-field="mental" data-value="4">4</button>
+              <button type="button" class="rating-btn" data-field="mental" data-value="5">5</button>
+            </div>
+            <p class="rating-label" id="mental-label"></p>
+            <p class="field-error" id="mental-error" hidden></p>
+          </fieldset>
+
+          <!-- スキン -->
+          <fieldset>
+            <legend>スキン <span class="required">*</span></legend>
+            <div class="rating-group" id="skin-group">
+              <button type="button" class="rating-btn" data-field="skin" data-value="1">1</button>
+              <button type="button" class="rating-btn" data-field="skin" data-value="2">2</button>
+              <button type="button" class="rating-btn" data-field="skin" data-value="3">3</button>
+              <button type="button" class="rating-btn" data-field="skin" data-value="4">4</button>
+              <button type="button" class="rating-btn" data-field="skin" data-value="5">5</button>
+            </div>
+            <p class="rating-label" id="skin-label"></p>
+            <p class="field-error" id="skin-error" hidden></p>
+          </fieldset>
+
+          <!-- 脳疲労 -->
+          <fieldset>
+            <legend>脳疲労 <span class="required">*</span></legend>
+            <div class="rating-group" id="brain-group">
+              <button type="button" class="rating-btn" data-field="brainFatigue" data-value="1">1</button>
+              <button type="button" class="rating-btn" data-field="brainFatigue" data-value="2">2</button>
+              <button type="button" class="rating-btn" data-field="brainFatigue" data-value="3">3</button>
+              <button type="button" class="rating-btn" data-field="brainFatigue" data-value="4">4</button>
+              <button type="button" class="rating-btn" data-field="brainFatigue" data-value="5">5</button>
+            </div>
+            <p class="rating-label" id="brain-label"></p>
+            <p class="field-error" id="brain-error" hidden></p>
+          </fieldset>
+
+          <!-- 勤務状態 -->
+          <fieldset>
+            <legend>勤務状態 <span class="required">*</span></legend>
+            <div class="segment-group" id="workstyle-group">
+              <button type="button" class="segment-btn" data-value="remote">在宅</button>
+              <button type="button" class="segment-btn" data-value="office">出社</button>
+              <button type="button" class="segment-btn" data-value="business_trip">出張</button>
+              <button type="button" class="segment-btn" data-value="day_off">休み</button>
+            </div>
+            <p class="field-error" id="workstyle-error" hidden></p>
+          </fieldset>
+
+          <!-- メモ -->
+          <label for="log-memo">メモ（任意）</label>
+          <textarea id="log-memo" name="memo" rows="3" placeholder="自由記述"></textarea>
+
+          <button type="submit" id="log-save-btn">保存</button>
+        </form>
+      </section>
+
+      <!-- 履歴画面 -->
+      <section id="screen-history" hidden>
+        <h1>履歴</h1>
+        <div id="history-list"></div>
+      </section>
+
+      <!-- グラフ画面 -->
+      <section id="screen-chart" hidden>
+        <h1>コンディション分析</h1>
+
+        <div class="chart-filter">
+          <div class="segment-group" id="period-group">
+            <button type="button" class="segment-btn" data-period="7">7日</button>
+            <button type="button" class="segment-btn segment-btn--selected" data-period="30">30日</button>
+            <button type="button" class="segment-btn" data-period="90">90日</button>
+            <button type="button" class="segment-btn" data-period="custom">カスタム</button>
+          </div>
+          <div id="custom-range" hidden>
+            <input type="date" id="chart-from" />
+            <span>〜</span>
+            <input type="date" id="chart-to" />
+          </div>
+        </div>
+
+        <div id="chart-no-data" hidden>記録がありません</div>
+        <div id="chart-container">
+          <canvas id="condition-chart"></canvas>
+        </div>
+      </section>
+    </main>
+
+    <!-- ボトムナビゲーション -->
+    <nav id="bottom-nav">
+      <button type="button" class="nav-btn nav-btn--active" data-screen="log">記録</button>
+      <button type="button" class="nav-btn" data-screen="history">履歴</button>
+      <button type="button" class="nav-btn" data-screen="chart">グラフ</button>
+    </nav>
+
+    <!-- 編集モーダル -->
+    <dialog id="edit-modal">
+      <article>
+        <h2>記録を編集</h2>
+        <form id="edit-form" novalidate>
+          <input type="hidden" id="edit-id" />
+          <input type="hidden" id="edit-log-date" />
+
+          <fieldset>
+            <legend>メンタル <span class="required">*</span></legend>
+            <div class="rating-group" id="edit-mental-group">
+              <button type="button" class="rating-btn" data-field="edit-mental" data-value="1">1</button>
+              <button type="button" class="rating-btn" data-field="edit-mental" data-value="2">2</button>
+              <button type="button" class="rating-btn" data-field="edit-mental" data-value="3">3</button>
+              <button type="button" class="rating-btn" data-field="edit-mental" data-value="4">4</button>
+              <button type="button" class="rating-btn" data-field="edit-mental" data-value="5">5</button>
+            </div>
+            <p class="rating-label" id="edit-mental-label"></p>
+          </fieldset>
+
+          <fieldset>
+            <legend>スキン <span class="required">*</span></legend>
+            <div class="rating-group" id="edit-skin-group">
+              <button type="button" class="rating-btn" data-field="edit-skin" data-value="1">1</button>
+              <button type="button" class="rating-btn" data-field="edit-skin" data-value="2">2</button>
+              <button type="button" class="rating-btn" data-field="edit-skin" data-value="3">3</button>
+              <button type="button" class="rating-btn" data-field="edit-skin" data-value="4">4</button>
+              <button type="button" class="rating-btn" data-field="edit-skin" data-value="5">5</button>
+            </div>
+            <p class="rating-label" id="edit-skin-label"></p>
+          </fieldset>
+
+          <fieldset>
+            <legend>脳疲労 <span class="required">*</span></legend>
+            <div class="rating-group" id="edit-brain-group">
+              <button type="button" class="rating-btn" data-field="edit-brain" data-value="1">1</button>
+              <button type="button" class="rating-btn" data-field="edit-brain" data-value="2">2</button>
+              <button type="button" class="rating-btn" data-field="edit-brain" data-value="3">3</button>
+              <button type="button" class="rating-btn" data-field="edit-brain" data-value="4">4</button>
+              <button type="button" class="rating-btn" data-field="edit-brain" data-value="5">5</button>
+            </div>
+            <p class="rating-label" id="edit-brain-label"></p>
+          </fieldset>
+
+          <fieldset>
+            <legend>勤務状態 <span class="required">*</span></legend>
+            <div class="segment-group" id="edit-workstyle-group">
+              <button type="button" class="segment-btn" data-value="remote">在宅</button>
+              <button type="button" class="segment-btn" data-value="office">出社</button>
+              <button type="button" class="segment-btn" data-value="business_trip">出張</button>
+              <button type="button" class="segment-btn" data-value="day_off">休み</button>
+            </div>
+          </fieldset>
+
+          <label for="edit-memo">メモ（任意）</label>
+          <textarea id="edit-memo" rows="3"></textarea>
+
+          <div class="modal-actions">
+            <button type="button" id="edit-cancel-btn" class="secondary">キャンセル</button>
+            <button type="submit" id="edit-save-btn">保存</button>
+          </div>
+        </form>
+      </article>
+    </dialog>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
