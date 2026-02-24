@@ -174,6 +174,7 @@ button.contrast:hover {
   cursor: pointer;
   transition: background-color 0.1s, border-color 0.1s;
   padding: 0;
+  margin-bottom: 0;
 }
 
 .rating-btn:hover {
@@ -216,6 +217,7 @@ button.contrast:hover {
   font-weight: var(--font-weight-medium);
   cursor: pointer;
   transition: background-color 0.1s;
+  margin-bottom: 0;
 }
 
 .segment-btn:last-child {
