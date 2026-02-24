@@ -22,7 +22,23 @@
       <span id="error-banner-message"></span>
     </div>
 
-    <main>
+    <!-- サインアウトボタン（認証済み時のみ表示） -->
+    <button type="button" id="sign-out-btn" class="sign-out-btn" hidden>サインアウト</button>
+
+    <!-- ログイン画面 -->
+    <section id="screen-auth">
+      <h1 class="auth-title">コンディションログ</h1>
+      <form id="auth-form" novalidate>
+        <label for="auth-email">メールアドレス</label>
+        <input type="email" id="auth-email" autocomplete="email" required />
+        <label for="auth-password">パスワード</label>
+        <input type="password" id="auth-password" autocomplete="current-password" required />
+        <button type="submit" id="auth-submit-btn">サインイン</button>
+        <p id="auth-error" class="field-error" hidden></p>
+      </form>
+    </section>
+
+    <main hidden>
       <!-- 記録画面 -->
       <section id="screen-log">
         <h1>コンディション記録</h1>
@@ -132,7 +148,7 @@
     </main>
 
     <!-- ボトムナビゲーション -->
-    <nav id="bottom-nav">
+    <nav id="bottom-nav" hidden>
       <button type="button" class="nav-btn nav-btn--active" data-screen="log">記録</button>
       <button type="button" class="nav-btn" data-screen="history">履歴</button>
       <button type="button" class="nav-btn" data-screen="chart">グラフ</button>

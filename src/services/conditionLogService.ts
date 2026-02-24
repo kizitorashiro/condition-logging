@@ -21,14 +21,14 @@ type ValidationError = {
 export class ConditionLogService {
   constructor(private readonly repository: ConditionLogRepository) {}
 
-  save(input: SaveInput): void {
+  async save(input: SaveInput): Promise<void> {
     const errors = this.validate(input);
     if (errors.length > 0) {
       throw new ValidationErrors(errors);
     }
 
     const logDate = input.logDate ?? getTodayString();
-    const existing = this.repository.getByLogDate(logDate);
+    const existing = await this.repository.getByLogDate(logDate);
 
     const log: ConditionLog = {
       id: existing?.id ?? crypto.randomUUID(),
@@ -41,22 +41,22 @@ export class ConditionLogService {
       memo: input.memo,
     };
 
-    this.repository.save(log);
+    await this.repository.save(log);
   }
 
-  delete(id: string): void {
-    this.repository.delete(id);
+  async delete(id: string): Promise<void> {
+    await this.repository.delete(id);
   }
 
-  getAll(): ConditionLog[] {
+  async getAll(): Promise<ConditionLog[]> {
     return this.repository.getAll();
   }
 
-  getByDateRange(from: string, to: string): ConditionLog[] {
+  async getByDateRange(from: string, to: string): Promise<ConditionLog[]> {
     return this.repository.getByDateRange(from, to);
   }
 
-  getByLogDate(logDate: string): ConditionLog | null {
+  async getByLogDate(logDate: string): Promise<ConditionLog | null> {
     return this.repository.getByLogDate(logDate);
   }
 

@@ -12,10 +12,10 @@ export class ChartScreen {
 
   constructor(private readonly service: ConditionLogService) {}
 
-  init(): void {
+  async init(): Promise<void> {
     this.setupPeriodFilter();
     this.setupCustomRange();
-    this.renderChart();
+    await this.renderChart();
   }
 
   private setupPeriodFilter(): void {
@@ -37,7 +37,7 @@ export class ChartScreen {
       }
 
       if (this.currentPeriod !== 'custom') {
-        this.renderChart();
+        void this.renderChart();
       }
     });
   }
@@ -49,7 +49,7 @@ export class ChartScreen {
 
     const onCustomChange = () => {
       if (this.currentPeriod === 'custom' && fromInput.value && toInput.value) {
-        this.renderChart();
+        void this.renderChart();
       }
     };
 
@@ -71,7 +71,7 @@ export class ChartScreen {
     return { from: addDays(today, -(days - 1)), to: today };
   }
 
-  private renderChart(): void {
+  private async renderChart(): Promise<void> {
     const range = this.getDateRange();
     const noDataEl = document.querySelector<HTMLElement>('#chart-no-data');
     const containerEl = document.querySelector<HTMLElement>('#chart-container');
@@ -80,7 +80,7 @@ export class ChartScreen {
 
     let logs;
     try {
-      logs = this.service.getByDateRange(range.from, range.to);
+      logs = await this.service.getByDateRange(range.from, range.to);
     } catch (e) {
       this.showErrorBanner(e instanceof Error ? e.message : '読み込みに失敗しました');
       return;

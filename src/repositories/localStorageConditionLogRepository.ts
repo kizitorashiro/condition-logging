@@ -4,7 +4,7 @@ import type { ConditionLogRepository } from './conditionLogRepository';
 const STORAGE_KEY = 'condition_logs';
 
 export class LocalStorageConditionLogRepository implements ConditionLogRepository {
-  getAll(): ConditionLog[] {
+  async getAll(): Promise<ConditionLog[]> {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw === null) return [];
@@ -15,18 +15,19 @@ export class LocalStorageConditionLogRepository implements ConditionLogRepositor
     }
   }
 
-  getByDateRange(from: string, to: string): ConditionLog[] {
+  async getByDateRange(from: string, to: string): Promise<ConditionLog[]> {
     try {
-      return this.getAll().filter((log) => log.logDate >= from && log.logDate <= to);
+      const all = await this.getAll();
+      return all.filter((log) => log.logDate >= from && log.logDate <= to);
     } catch (e) {
       console.error('Failed to load condition logs by date range', e);
       throw new Error('コンディションログの読み込みに失敗しました');
     }
   }
 
-  getByLogDate(logDate: string): ConditionLog | null {
+  async getByLogDate(logDate: string): Promise<ConditionLog | null> {
     try {
-      const all = this.getAll();
+      const all = await this.getAll();
       return all.find((log) => log.logDate === logDate) ?? null;
     } catch (e) {
       console.error('Failed to load condition log by date', e);
@@ -34,9 +35,9 @@ export class LocalStorageConditionLogRepository implements ConditionLogRepositor
     }
   }
 
-  save(log: ConditionLog): void {
+  async save(log: ConditionLog): Promise<void> {
     try {
-      const all = this.getAll();
+      const all = await this.getAll();
       const existingIndex = all.findIndex((l) => l.logDate === log.logDate);
       if (existingIndex >= 0) {
         all[existingIndex] = { ...log, id: all[existingIndex].id };
@@ -50,9 +51,9 @@ export class LocalStorageConditionLogRepository implements ConditionLogRepositor
     }
   }
 
-  delete(id: string): void {
+  async delete(id: string): Promise<void> {
     try {
-      const all = this.getAll();
+      const all = await this.getAll();
       const filtered = all.filter((log) => log.id !== id);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
     } catch (e) {

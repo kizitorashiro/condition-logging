@@ -36,26 +36,26 @@ export class LogScreen {
 
   constructor(private readonly service: ConditionLogService) {}
 
-  init(): void {
+  async init(): Promise<void> {
     const dateInput = document.querySelector<HTMLInputElement>('#log-date');
     if (!dateInput) return;
 
     dateInput.value = getTodayString();
 
-    this.loadExistingRecord(getTodayString());
+    await this.loadExistingRecord(getTodayString());
     this.setupRatingButtons();
     this.setupSegmentButtons();
     this.setupDateChange();
     this.setupForm();
   }
 
-  private loadExistingRecord(logDate: string): void {
+  private async loadExistingRecord(logDate: string): Promise<void> {
     const badge = document.querySelector<HTMLElement>('#log-recorded-badge');
     const note = document.querySelector<HTMLElement>('#log-overwrite-note');
     const memoEl = document.querySelector<HTMLTextAreaElement>('#log-memo');
 
     try {
-      const existing = this.service.getByLogDate(logDate);
+      const existing = await this.service.getByLogDate(logDate);
       if (existing) {
         this.mental = existing.mental;
         this.skin = existing.skin;
@@ -159,7 +159,7 @@ export class LogScreen {
     if (!dateInput) return;
     dateInput.addEventListener('change', () => {
       this.clearAllErrors();
-      this.loadExistingRecord(dateInput.value);
+      void this.loadExistingRecord(dateInput.value);
     });
   }
 
@@ -168,11 +168,11 @@ export class LogScreen {
     if (!form) return;
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      this.handleSave();
+      void this.handleSave();
     });
   }
 
-  private handleSave(): void {
+  private async handleSave(): Promise<void> {
     const dateInput = document.querySelector<HTMLInputElement>('#log-date');
     const memoEl = document.querySelector<HTMLTextAreaElement>('#log-memo');
     const logDate = dateInput?.value ?? getTodayString();
@@ -181,7 +181,7 @@ export class LogScreen {
     this.clearAllErrors();
 
     try {
-      this.service.save({
+      await this.service.save({
         logDate,
         mental: this.mental ?? 0,
         skin: this.skin ?? 0,
@@ -189,7 +189,7 @@ export class LogScreen {
         workStyle: this.workStyle ?? ('' as WorkStyle),
         memo,
       });
-      this.loadExistingRecord(logDate);
+      await this.loadExistingRecord(logDate);
     } catch (e) {
       if (e instanceof ValidationErrors) {
         e.errors.forEach(({ field, message }) => {

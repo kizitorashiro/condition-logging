@@ -42,18 +42,18 @@ export class HistoryScreen {
 
   constructor(private readonly service: ConditionLogService) {}
 
-  init(): void {
-    this.renderList();
+  async init(): Promise<void> {
+    await this.renderList();
     this.setupEditModal();
   }
 
-  private renderList(): void {
+  private async renderList(): Promise<void> {
     const container = document.querySelector<HTMLElement>('#history-list');
     if (!container) return;
 
     let logs: ConditionLog[];
     try {
-      logs = this.service.getAll();
+      logs = await this.service.getAll();
     } catch (e) {
       this.showErrorBanner(e instanceof Error ? e.message : '読み込みに失敗しました');
       return;
@@ -106,17 +106,17 @@ export class HistoryScreen {
       </div>
     `;
 
-    card.querySelector('.delete-btn')?.addEventListener('click', () => this.handleDelete(log));
+    card.querySelector('.delete-btn')?.addEventListener('click', () => void this.handleDelete(log));
     card.querySelector('.edit-btn')?.addEventListener('click', () => this.handleEditOpen(log));
 
     return card;
   }
 
-  private handleDelete(log: ConditionLog): void {
+  private async handleDelete(log: ConditionLog): Promise<void> {
     if (!window.confirm(`${log.logDate} の記録を削除しますか？`)) return;
     try {
-      this.service.delete(log.id);
-      this.renderList();
+      await this.service.delete(log.id);
+      await this.renderList();
     } catch (e) {
       this.showErrorBanner(e instanceof Error ? e.message : '削除に失敗しました');
     }
@@ -206,11 +206,11 @@ export class HistoryScreen {
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      this.handleEditSave();
+      void this.handleEditSave();
     });
   }
 
-  private handleEditSave(): void {
+  private async handleEditSave(): Promise<void> {
     const dateInput = document.querySelector<HTMLInputElement>('#edit-log-date');
     const memoInput = document.querySelector<HTMLTextAreaElement>('#edit-memo');
     const modal = document.querySelector<HTMLDialogElement>('#edit-modal');
@@ -219,7 +219,7 @@ export class HistoryScreen {
     const memo = memoInput?.value ?? '';
 
     try {
-      this.service.save({
+      await this.service.save({
         logDate,
         mental: this.editMental ?? 0,
         skin: this.editSkin ?? 0,
@@ -228,7 +228,7 @@ export class HistoryScreen {
         memo,
       });
       modal?.close();
-      this.renderList();
+      await this.renderList();
     } catch (e) {
       if (e instanceof ValidationErrors) {
         // モーダル内でのバリデーションエラーはバナーで表示

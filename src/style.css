@@ -368,6 +368,48 @@ dialog::backdrop {
 }
 
 /* ============================================================
+   ログイン画面
+   ============================================================ */
+#screen-auth {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: var(--spacing-md);
+}
+
+#screen-auth form {
+  width: 100%;
+  max-width: 360px;
+}
+
+.auth-title {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+/* ============================================================
+   サインアウトボタン
+   ============================================================ */
+.sign-out-btn {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background: transparent !important;
+  border: none !important;
+  color: var(--color-accent) !important;
+  font-size: var(--font-size-sm);
+  padding: 4px 8px;
+  cursor: pointer;
+  z-index: 200;
+}
+
+.sign-out-btn:hover {
+  opacity: 0.75;
+}
+
+/* ============================================================
    ボトムナビゲーション
    ============================================================ */
 #bottom-nav {
