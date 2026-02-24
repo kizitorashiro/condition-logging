@@ -264,6 +264,52 @@ button.contrast:hover {
   padding: var(--spacing-lg);
 }
 
+/* ============================================================
+   グラフ凡例トグルボタン
+   ============================================================ */
+.chart-legend {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-sm);
+}
+
+.legend-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1.5px solid;
+  background: transparent;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: opacity 0.15s;
+  margin-bottom: 0;
+}
+
+.legend-chip {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-btn--mental { border-color: var(--color-chart-mental); color: var(--color-chart-mental); }
+.legend-btn--skin   { border-color: var(--color-chart-skin);   color: var(--color-chart-skin); }
+.legend-btn--brain  { border-color: var(--color-chart-brain);  color: var(--color-chart-brain); }
+
+.legend-btn--mental .legend-chip { background: var(--color-chart-mental); }
+.legend-btn--skin   .legend-chip { background: var(--color-chart-skin); }
+.legend-btn--brain  .legend-chip { background: var(--color-chart-brain); }
+
+.legend-btn--mental.legend-btn--active { background: #fdf0ea; }
+.legend-btn--skin.legend-btn--active   { background: #fef9ee; }
+.legend-btn--brain.legend-btn--active  { background: #eff6ff; }
+
+.legend-btn--inactive { opacity: 0.3; }
+
 #chart-container {
   position: relative;
 }

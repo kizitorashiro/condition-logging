@@ -121,9 +121,14 @@ export class ChartScreen {
             borderColor: '#c47a56',
             backgroundColor: 'transparent',
             pointBackgroundColor: '#c47a56',
+            borderWidth: 2.5,
+            pointRadius: 3,
+            pointHoverRadius: 5,
+            borderDash: [],
+            fill: false,
+            clip: false,
             spanGaps: false,
             tension: 0.3,
-            pointStyle: 'circle',
           },
           {
             label: 'スキン',
@@ -131,9 +136,14 @@ export class ChartScreen {
             borderColor: '#F59E0B',
             backgroundColor: 'transparent',
             pointBackgroundColor: '#F59E0B',
+            borderWidth: 2.5,
+            pointRadius: 3,
+            pointHoverRadius: 5,
+            borderDash: [6, 3],
+            fill: false,
+            clip: false,
             spanGaps: false,
             tension: 0.3,
-            pointStyle: 'circle',
           },
           {
             label: '脳疲労',
@@ -141,14 +151,22 @@ export class ChartScreen {
             borderColor: '#3B82F6',
             backgroundColor: 'transparent',
             pointBackgroundColor: '#3B82F6',
+            borderWidth: 2.5,
+            pointRadius: 3,
+            pointHoverRadius: 5,
+            borderDash: [2, 4],
+            fill: false,
+            clip: false,
             spanGaps: false,
             tension: 0.3,
-            pointStyle: 'circle',
           },
         ],
       },
       options: {
         responsive: true,
+        layout: {
+          padding: { top: 8, bottom: 8 },
+        },
         scales: {
           y: {
             min: 1,
@@ -159,19 +177,40 @@ export class ChartScreen {
             ticks: {
               maxTicksLimit: 10,
               maxRotation: 45,
+              callback: (_, index) => {
+                const label = labels[index];
+                if (!label) return '';
+                const [, m, d] = label.split('-');
+                return `${parseInt(m)}/${parseInt(d)}`;
+              },
             },
           },
         },
         plugins: {
-          legend: {
-            position: 'top',
-            labels: {
-              usePointStyle: true,
-              pointStyle: 'circle',
-            },
+          legend: { display: false },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
           },
         },
       },
+    });
+
+    this.setupLegendButtons();
+  }
+
+  private setupLegendButtons(): void {
+    const container = document.querySelector('#chart-legend');
+    if (!container || !this.chart) return;
+    container.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.legend-btn');
+      if (!btn || btn.dataset['datasetIndex'] === undefined) return;
+      const idx = parseInt(btn.dataset['datasetIndex']);
+      const meta = this.chart!.getDatasetMeta(idx);
+      meta.hidden = !meta.hidden;
+      btn.classList.toggle('legend-btn--active', !meta.hidden);
+      btn.classList.toggle('legend-btn--inactive', meta.hidden);
+      this.chart!.update();
     });
   }
 
