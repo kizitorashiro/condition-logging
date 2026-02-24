@@ -5,6 +5,10 @@ dist/
 test-results/
 playwright-report/
 
+# 個人データ・一時ファイル
+condition-logging.csv
+import.sql
+
 # TypeScriptのコンパイル済みJS（src・e2e配下）
 src/**/*.js
 e2e/**/*.js
