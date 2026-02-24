@@ -8,7 +8,7 @@ export default defineConfig({
   retries: 0,
   workers: 1,
   use: {
-    baseURL: 'http://localhost:4173',
+    baseURL: 'http://localhost:4173/condition-logging',
   },
   projects: [
     {
@@ -18,7 +18,7 @@ export default defineConfig({
   ],
   webServer: {
     command: 'npm run build && npm run preview',
-    url: 'http://localhost:4173',
+    url: 'http://localhost:4173/condition-logging/',
     reuseExistingServer: !process.env.CI,
   },
 });
