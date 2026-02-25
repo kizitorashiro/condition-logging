@@ -78,7 +78,7 @@ export class SupabaseConditionLogRepository implements ConditionLogRepository {
           skin: log.skin,
           brain_fatigue: log.brainFatigue,
           work_style: log.workStyle,
-          memo: log.memo || null,
+          memo: log.memo,
         },
         { onConflict: 'id' }
       );
