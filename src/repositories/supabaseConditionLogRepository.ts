@@ -23,7 +23,7 @@ function toConditionLog(row: DbRow): ConditionLog {
     skin: row.skin,
     brainFatigue: row.brain_fatigue,
     workStyle: row.work_style as ConditionLog['workStyle'],
-    memo: row.memo,
+    memo: row.memo ?? '',
   };
 }
 
@@ -78,7 +78,7 @@ export class SupabaseConditionLogRepository implements ConditionLogRepository {
           skin: log.skin,
           brain_fatigue: log.brainFatigue,
           work_style: log.workStyle,
-          memo: log.memo,
+          memo: log.memo || null,
         },
         { onConflict: 'id' }
       );
