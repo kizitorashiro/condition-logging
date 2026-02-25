@@ -23,7 +23,7 @@ function toConditionLog(row: DbRow): ConditionLog {
     skin: row.skin,
     brainFatigue: row.brain_fatigue,
     workStyle: row.work_style as ConditionLog['workStyle'],
-    memo: row.memo ?? '',
+    memo: row.memo,
   };
 }
 
